@@ -160,6 +160,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1437253218497393274}
   - component: {fileID: 1437253218497393278}
+  - component: {fileID: 5788405181799363782}
   - component: {fileID: 1437253218497393273}
   - component: {fileID: 1437253218497393272}
   - component: {fileID: 1437253218497393275}
@@ -199,6 +200,32 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1437253218497393269}
   m_CullTransparentMesh: 1
+--- !u!114 &5788405181799363782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1437253218497393269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c551325b6ef19c41a650de7e240930f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  self_: {fileID: 1437253216663997357}
+  textSpeed_: 25
+  punctuationPause: 0.1
+  skipButton_: {fileID: 0}
+  writeTextOnStart_: 1
+  useFade_: 1
+  clearOldTextWithFade: 0
+  isWriting_: 0
+  startedEvent_:
+    m_PersistentCalls:
+      m_Calls: []
+  stoppedEvent_:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1437253218497393273
 MonoBehaviour:
   m_ObjectHideFlags: 0

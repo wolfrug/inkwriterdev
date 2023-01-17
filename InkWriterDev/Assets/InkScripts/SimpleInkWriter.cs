@@ -177,10 +177,18 @@ namespace InkEngine {
             }
         }
 
-        public void CloseCurrentDialogBox () {
+        public void CloseCurrentDialogBox (bool clear = true) {
+            if (clear) {
+                m_currentDialogBox.ClearAllText ();
+                m_currentDialogBox.ClearAllOptions ();
+            }
             m_currentDialogBox.Active = false;
         }
-        public void OpenCurrentDialogBox () {
+        public void OpenCurrentDialogBox (bool clear = true) {
+            if (clear) {
+                m_currentDialogBox.ClearAllText ();
+                m_currentDialogBox.ClearAllOptions ();
+            }
             m_currentDialogBox.Active = true;
         }
         public void ChangeCurrentDialogBox (SimpleInkDialogBox newBox, bool closeOld = true, bool openNew = true) {

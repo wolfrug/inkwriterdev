@@ -904,7 +904,7 @@ PrefabInstance:
       objectReference: {fileID: 1664897042}
     - target: {fileID: 3049190521630157806, guid: 623d54806b6fb0744abdb5acdbaed062, type: 3}
       propertyPath: m_writerStartedEvent.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3049190521630157806, guid: 623d54806b6fb0744abdb5acdbaed062, type: 3}
       propertyPath: m_writerStartedEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
@@ -913,18 +913,18 @@ PrefabInstance:
     - target: {fileID: 3049190521630157806, guid: 623d54806b6fb0744abdb5acdbaed062, type: 3}
       propertyPath: m_writerStartedEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 537551228}
+      objectReference: {fileID: 0}
     - target: {fileID: 3049190521630157806, guid: 623d54806b6fb0744abdb5acdbaed062, type: 3}
       propertyPath: m_writerStartedEvent.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3049190521630157806, guid: 623d54806b6fb0744abdb5acdbaed062, type: 3}
       propertyPath: m_writerStartedEvent.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: ClearAllText
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3049190521630157806, guid: 623d54806b6fb0744abdb5acdbaed062, type: 3}
       propertyPath: m_writerStartedEvent.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: SimpleInkDialogBox, Assembly-CSharp
+      value: InkEngine.SimpleInkWriter, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 3049190521630157806, guid: 623d54806b6fb0744abdb5acdbaed062, type: 3}
       propertyPath: m_writerStartedEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_BoolArgument
@@ -932,7 +932,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3049190521630157806, guid: 623d54806b6fb0744abdb5acdbaed062, type: 3}
       propertyPath: m_writerStartedEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3049190522450245036, guid: 623d54806b6fb0744abdb5acdbaed062, type: 3}
       propertyPath: m_AnchorMax.x
