@@ -73,43 +73,28 @@ namespace InkEngine {
     }
 
     public class InkStoryStateManager : MonoBehaviour {
-        public TextAsset m_storyJSON;
-        private Story m_inkStory;
+        public InkStoryObject m_storyObject;
         public List<InkTextVariable> m_searchableTextVariables = new List<InkTextVariable> { }; // which text variables we are searching for & parsing
         public bool m_startOnInit = true;
 
         void Awake () {
             if (m_startOnInit) {
-                StartStory ();
+                InitStory ();
             }
         }
-
-        public void StartStory () {
-            // We load the story, or start a new one
-            LoadStory ();
-        }
-
         public void SaveStory () {
-            string json = m_inkStory.state.ToJson ();
-            PlayerPrefs.SetString ("InkWriter_ExampleSave", json);
+            m_storyObject.SaveStory ();
         }
-        public void LoadStory () {
-            m_inkStory = new Story (m_storyJSON.text);
-            if (SavedStory) { // We load if we can
-                string savedJson = PlayerPrefs.GetString ("InkWriter_ExampleSave");
-                m_inkStory.state.LoadJson (savedJson);
-                Debug.Log ("Loaded story state");
-            } else { // If we can't, we start from beginning
-                Debug.Log ("No saved story found - starting new story");
-            }
+        public void InitStory () { // Init -or- load
+            m_storyObject.InitStory ();
         }
         public bool SavedStory {
             get {
-                return PlayerPrefs.HasKey ("InkWriter_ExampleSave");
+                return m_storyObject.SavedStory;
             }
         }
         public bool IsLoaded () {
-            return m_inkStory != null;
+            return m_storyObject.IsLoaded ();
         }
 
         public void AddSearchableFunction (InkTextVariable newVariable) {
@@ -119,10 +104,10 @@ namespace InkEngine {
         // Creates a string array of all the strings in a specific knot, and optionally the choices at the end
         // Note: create the List<Choice> when calling this and the list will be automagically modified (we don't return a new list)
         public InkDialogueLine[] CreateStringArrayKnot (string targetKnot, List<InkChoiceLine> gatherChoices) {
-            m_inkStory.ChoosePathString (targetKnot);
+            m_storyObject.m_inkStory.ChoosePathString (targetKnot);
             InkDialogueLine[] returnArray = CreateDialogueArray ();
             if (gatherChoices != null) {
-                foreach (Choice choice in m_inkStory.currentChoices) {
+                foreach (Choice choice in m_storyObject.m_inkStory.currentChoices) {
                     gatherChoices.Add (ParseInkChoice (choice));
                     //Debug.Log ("Added end choice with name: " + choice.text);
                 }
@@ -132,15 +117,15 @@ namespace InkEngine {
 
         // Creates a list of strings starting from a choice, and then optionally gathers the choices
         public InkDialogueLine[] CreateStringArrayChoice (Choice startChoice, List<InkChoiceLine> gatherChoices) {
-            if (m_inkStory.currentChoices.Contains (startChoice)) {
-                m_inkStory.ChooseChoiceIndex (startChoice.index);
+            if (m_storyObject.m_inkStory.currentChoices.Contains (startChoice)) {
+                m_storyObject.m_inkStory.ChooseChoiceIndex (startChoice.index);
             } else {
                 Debug.LogWarning ("Tried to choose a choice that is no longer among the Inkwriter's available choices!");
-                m_inkStory.ChoosePath (startChoice.targetPath);
+                m_storyObject.m_inkStory.ChoosePath (startChoice.targetPath);
             }
             InkDialogueLine[] returnArray = CreateDialogueArray ();
             if (gatherChoices != null) {
-                foreach (Choice choice in m_inkStory.currentChoices) {
+                foreach (Choice choice in m_storyObject.m_inkStory.currentChoices) {
                     gatherChoices.Add (ParseInkChoice (choice));
                     //Debug.Log ("Added end choice with name: " + choice.text);
                 }
@@ -152,11 +137,11 @@ namespace InkEngine {
         InkDialogueLine[] CreateDialogueArray () {
             string returnText = "";
             List<InkDialogueLine> returnArray = new List<InkDialogueLine> { };
-            while (m_inkStory.canContinue) {
-                returnText = m_inkStory.Continue ();
+            while (m_storyObject.m_inkStory.canContinue) {
+                returnText = m_storyObject.m_inkStory.Continue ();
                 InkDialogueLine newLine = ParseInkText (returnText);
-                if (m_inkStory.currentTags.Count > 0) {
-                    newLine.inkTags.AddRange (new List<string> (m_inkStory.currentTags));
+                if (m_storyObject.m_inkStory.currentTags.Count > 0) {
+                    newLine.inkTags.AddRange (new List<string> (m_storyObject.m_inkStory.currentTags));
                 };
                 returnArray.Add (newLine);
             }
@@ -194,7 +179,7 @@ namespace InkEngine {
                 // Group 2 = arguments
                 if (innerMatch.Groups.Count > 2) {
                     foreach (string splitString in innerMatch.Groups[2].Value.Split (',')) {
-                        newVariable.VariableArguments.Add (splitString);
+                        newVariable.VariableArguments.Add (splitString.Trim ());
                         //Debug.Log ("Argument: " + newVariable.VariableArguments[newVariable.VariableArguments.Count - 1]);
                     }
                 }

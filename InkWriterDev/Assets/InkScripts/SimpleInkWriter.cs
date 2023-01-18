@@ -131,6 +131,7 @@ namespace InkEngine {
             if (currentLine.inkVariables.Count > 0) {
                 foreach (InkTextVariable variable in currentLine.inkVariables) {
                     m_textFunctionFoundEvent.Invoke (currentLine, variable);
+                    Debug.Log ("Invoked ink function: " + variable.variableName + "(" + variable.VariableArguments + ")");
                 }
             }
             if (currentLine.inkTags.Count > 0) {

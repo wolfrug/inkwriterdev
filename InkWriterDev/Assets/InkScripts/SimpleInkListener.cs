@@ -5,9 +5,10 @@ using UnityEngine;
 namespace InkEngine {
 
     public enum ArgumentRequirements {
-        ANY_OF = 0000,
-        EXACTLY = 0001,
-        NONE_OF = 0002,
+        ANY_OF = 0000, // any of the given arguments
+        EXACTLY = 0001, // exactly these arguments
+        NONE_OF = 0002, // none of these arguments (but others allowed)
+        ALL = 0003, // as long as it's the right variable, it is ok
     }
 
     [System.Serializable]
@@ -43,6 +44,9 @@ namespace InkEngine {
                         return false;
                     }
                 }
+                return true;
+            }
+            if (argumentRequirement == ArgumentRequirements.ALL) {
                 return true;
             }
             return false;

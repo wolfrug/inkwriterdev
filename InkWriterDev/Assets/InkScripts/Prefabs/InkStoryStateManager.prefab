@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71bdcc5036f72d645852012aa3779f01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_storyJSON: {fileID: 4900000, guid: 5c790db8782ad794483cdb184464cdce, type: 3}
+  m_storyObject: {fileID: 11400000, guid: fc1ba53398782094997d27373a19c675, type: 2}
   m_searchableTextVariables:
   - variableName: PLAYER
   m_startOnInit: 1
