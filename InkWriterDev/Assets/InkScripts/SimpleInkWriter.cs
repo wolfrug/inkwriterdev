@@ -48,7 +48,7 @@ namespace InkEngine {
             });
         }
 
-        public void PlayKnot (string knotName) {
+        public void PlayKnot (string knotName) { // play directly from a knot
             if (m_manager.IsLoaded ()) {
                 List<InkChoiceLine> gatherChoices = new List<InkChoiceLine> { };
                 InkDialogueLine[] dialogueLines = m_manager.CreateStringArrayKnot (knotName, gatherChoices);
@@ -60,7 +60,7 @@ namespace InkEngine {
                 m_displayCoroutine = StartCoroutine (DisplayText (dialogueLines, gatherChoices));
             };
         }
-        public void PlayChoice (Choice choice) {
+        public void PlayChoice (Choice choice) { // play from a choice - mainly used internally
             if (m_manager.IsLoaded ()) {
                 List<InkChoiceLine> gatherChoices = new List<InkChoiceLine> { };
                 InkDialogueLine[] dialogueLines = m_manager.CreateStringArrayChoice (choice, gatherChoices);
@@ -70,6 +70,17 @@ namespace InkEngine {
                     m_writerStartedEvent.Invoke (this); // We invoke the started event when starting a whole new thing
                 }
                 m_displayCoroutine = StartCoroutine (DisplayText (dialogueLines, gatherChoices));
+            };
+        }
+
+        public void PlayDialogueLines (InkDialogueLine[] targetLines) { // just provide the lines directly
+            if (m_manager.IsLoaded ()) {
+                if (m_displayCoroutine != null) {
+                    StopCoroutine (m_displayCoroutine);
+                } else {
+                    m_writerStartedEvent.Invoke (this); // We invoke the started event when starting a whole new thing
+                }
+                m_displayCoroutine = StartCoroutine (DisplayText (targetLines, null));
             };
         }
         // Where most of the magic happens: takes the line of dialogue + possible expected choices, displays them one by one by spawning text objects
@@ -92,21 +103,26 @@ namespace InkEngine {
                     m_currentDialogBox.m_canContinue = false;
                 }
             }
-            if (gatherChoices.Count > 0) {
-                List < (InkChoiceLine, Button) > allButtons = new List < (InkChoiceLine, Button) > { };
-                foreach (InkChoiceLine choice in gatherChoices) {
-                    GameObject buttonGO = m_currentDialogBox.SpawnButtonObject (choice.choiceText.displayText);
-                    Button button = buttonGO.GetComponent<Button> ();
-                    button.interactable = SetChoiceInteractable (choice.choiceText);
-                    allButtons.Add ((choice, button));
+            if (gatherChoices != null) {
+                if (gatherChoices.Count > 0) {
+                    List < (InkChoiceLine, Button) > allButtons = new List < (InkChoiceLine, Button) > { };
+                    foreach (InkChoiceLine choice in gatherChoices) {
+                        GameObject buttonGO = m_currentDialogBox.SpawnButtonObject (choice.choiceText.displayText);
+                        Button button = buttonGO.GetComponent<Button> ();
+                        button.interactable = SetChoiceInteractable (choice.choiceText);
+                        allButtons.Add ((choice, button));
+                    }
+                    foreach ((InkChoiceLine, Button) set in allButtons) {
+                        set.Item2.onClick.AddListener (() => PressOptionButton (set.Item1, set.Item2, allButtons));
+                    }
+                    m_optionPressed = false;
+                    m_currentDialogBox.SetContinueButtonActive (false);
+                    m_choicesShownEvent.Invoke (allButtons);
+                    yield return new WaitUntil (() => m_optionPressed);
+                } else { // we only invoke the writer finished event if there really are no more choices
+                    m_writerFinishedEvent.Invoke (this);
+                    m_displayCoroutine = null;
                 }
-                foreach ((InkChoiceLine, Button) set in allButtons) {
-                    set.Item2.onClick.AddListener (() => PressOptionButton (set.Item1, set.Item2, allButtons));
-                }
-                m_optionPressed = false;
-                m_currentDialogBox.SetContinueButtonActive (false);
-                m_choicesShownEvent.Invoke (allButtons);
-                yield return new WaitUntil (() => m_optionPressed);
             } else { // we only invoke the writer finished event if there really are no more choices
                 m_writerFinishedEvent.Invoke (this);
                 m_displayCoroutine = null;
