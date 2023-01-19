@@ -73,13 +73,19 @@ namespace InkEngine {
     }
 
     public class InkStoryStateManager : MonoBehaviour {
-        public InkStoryObject m_storyObject;
+        public InkStoryData m_storyObject;
+        public InkStoryVariableData m_defaultTextVariables; // a scriptable object with the default ones, for quick lookup
         public List<InkTextVariable> m_searchableTextVariables = new List<InkTextVariable> { }; // which text variables we are searching for & parsing
         public bool m_startOnInit = true;
 
         void Awake () {
             if (m_startOnInit) {
                 InitStory ();
+            }
+            if (m_defaultTextVariables != null) {
+                foreach (InkTextVariable el in m_defaultTextVariables.m_variables) {
+                    AddSearchableFunction (el);
+                }
             }
         }
         public void SaveStory () {
@@ -98,7 +104,9 @@ namespace InkEngine {
         }
 
         public void AddSearchableFunction (InkTextVariable newVariable) {
-            m_searchableTextVariables.Add (newVariable);
+            if (m_searchableTextVariables.FindAll ((x) => x.variableName == newVariable.variableName).Count == 0) { // Only add if it hasn't been added already
+                m_searchableTextVariables.Add (newVariable);
+            };
         }
 
         // Creates a string array of all the strings in a specific knot, and optionally the choices at the end
@@ -197,16 +205,6 @@ namespace InkEngine {
             returnVal.choice = newChoice;
             returnVal.choiceText = ParseInkText (newChoice.text);
             return returnVal;
-        }
-
-        [NaughtyAttributes.Button]
-        void Test () {
-            ParseInkText ("PLAYER(1, 2) Lolol BEAR(23.2, axex) tell me about it");
-        }
-
-        [NaughtyAttributes.Button]
-        void TestInGame () {
-            CreateDialogueArray ();
         }
     }
 }

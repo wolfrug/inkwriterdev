@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_storyObject: {fileID: 11400000, guid: fc1ba53398782094997d27373a19c675, type: 2}
+  m_defaultTextVariables: {fileID: 11400000, guid: f1180ca2024c19542bff6ce2cb12ad5e, type: 2}
   m_searchableTextVariables:
   - variableName: PLAYER
   m_startOnInit: 1

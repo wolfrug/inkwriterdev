@@ -5,8 +5,8 @@ using UnityEngine;
 
 namespace InkEngine {
 
-    [CreateAssetMenu (fileName = "Data", menuName = "Ink Story Object", order = 1)]
-    public class InkStoryObject : ScriptableObject {
+    [CreateAssetMenu (fileName = "Data", menuName = "InkEngine/Ink Story Object", order = 1)]
+    public class InkStoryData : ScriptableObject {
 
         public string m_ID = "default";
         public TextAsset m_inkJsonAsset;

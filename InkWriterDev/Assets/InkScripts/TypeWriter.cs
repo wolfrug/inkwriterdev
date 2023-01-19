@@ -29,6 +29,12 @@ public class TypeWriter : MonoBehaviour {
     private float startAlpha_ = 1f;
 
     private void Start () {
+        // VERY UGLY HAHA
+        if (skipButton_ == null) {
+            if (transform.root.GetComponent<InkEngine.SimpleInkWriter> () != null) {
+                skipButton_ = transform.root.GetComponent<InkEngine.SimpleInkWriter> ().m_currentDialogBox.m_continueButton;
+            };
+        }
         if (skipButton_ != null) {
             skipButton_.onClick.AddListener (() => SkipWrite ());
         };

@@ -61,11 +61,11 @@ PLAYER_BARK() Even more player bark.
 
 OTHER_BARK() And other bark.
 
-PLAYER_BARK(good) This is an example of a bark with a variable - good.
+PLAYER_BARK(good) This is an example of a bark with an argument (good).
 
 PLAYER_BARK(good) Which could for example be used as a unit.
 
-PLAYER_BARK(bad) Another example of an argument bark.
+PLAYER_BARK(bad) Another example of an argument bark with the argument bad.
 
 PLAYER_BARK(bad) These will also show up though in the generic list of player barks.
 ->END
