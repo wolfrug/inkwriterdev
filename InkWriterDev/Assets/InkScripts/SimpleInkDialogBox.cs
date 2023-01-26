@@ -13,6 +13,7 @@ public class SimpleInkDialogBox : MonoBehaviour {
     public GameObject m_textBoxPrefab;
     public GameObject m_optionBoxPrefab;
     public Button m_continueButton;
+    public Button m_skipButton; // put this -above- the continue button ;)
     public bool m_canContinue;
     // Start is called before the first frame update
     void Start () {
@@ -37,9 +38,20 @@ public class SimpleInkDialogBox : MonoBehaviour {
         }
     }
 
+    public void SetSkipButtonActive (bool active) {
+        if (HasSkipButton) {
+            m_skipButton.gameObject.SetActive (active);
+        }
+    }
+
     public bool HasContinueButton {
         get {
             return m_continueButton != null;
+        }
+    }
+    public bool HasSkipButton {
+        get {
+            return m_skipButton != null;
         }
     }
 

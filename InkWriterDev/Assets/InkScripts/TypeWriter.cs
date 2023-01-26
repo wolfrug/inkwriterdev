@@ -32,7 +32,7 @@ public class TypeWriter : MonoBehaviour {
         // VERY UGLY HAHA
         if (skipButton_ == null) {
             if (transform.root.GetComponent<InkEngine.SimpleInkWriter> () != null) {
-                skipButton_ = transform.root.GetComponent<InkEngine.SimpleInkWriter> ().m_currentDialogBox.m_continueButton;
+                skipButton_ = transform.root.GetComponent<InkEngine.SimpleInkWriter> ().m_currentDialogBox.m_skipButton;
             };
         }
         if (skipButton_ != null) {
@@ -54,6 +54,9 @@ public class TypeWriter : MonoBehaviour {
         }
     }
     void OnDestroy () {
+        if (skipButton_ != null) {
+            skipButton_.onClick.RemoveListener (() => SkipWrite ());
+        }
         StopAllCoroutines ();
     }
 
@@ -81,6 +84,7 @@ public class TypeWriter : MonoBehaviour {
     }
     public void SkipWrite () {
         skipWrite_ = true;
+        SetSkipButtonActive (false);
     }
 
     IEnumerator FadeOutTextAndWrite (string theText) {
@@ -104,6 +108,7 @@ public class TypeWriter : MonoBehaviour {
         if (!isWriting_) {
             isWriting_ = true;
             startedEvent_.Invoke (this);
+            SetSkipButtonActive (true);
         };
         //  Debug.Log ("Writing text: " + theText);
         if (!useFade_) {
@@ -169,6 +174,7 @@ public class TypeWriter : MonoBehaviour {
         self_.text = textToWrite_;
         isWriting_ = false;
         stoppedEvent_.Invoke (this);
+        SetSkipButtonActive (false);
     }
     public bool IsPunctuation (char character) {
         switch (character) {
@@ -210,6 +216,12 @@ public class TypeWriter : MonoBehaviour {
     public void ClearWriter () {
         //  Debug.Log ("Clearing writer");
         self_.text = "";
+    }
+
+    public void SetSkipButtonActive (bool active) {
+        if (skipButton_ != null) {
+            skipButton_.gameObject.SetActive (active);
+        }
     }
 
 }
