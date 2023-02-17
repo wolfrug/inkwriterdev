@@ -36,6 +36,7 @@ namespace InkEngine {
         public WriterEvent m_writerFinishedEvent;
         public WriterEvent m_writerStartedEvent;
         private bool m_optionPressed = false;
+        private bool m_waitingOnOptionPress = false;
         private Coroutine m_displayCoroutine = null;
         void Awake () {
             if (m_manager == null) {
@@ -95,9 +96,9 @@ namespace InkEngine {
             for (int i = 0; i < dialogueLines.Length; i++) {
                 InkDialogueLine currentLine = dialogueLines[i];
                 InvokeDialogueEvents (currentLine);
+                yield return StartCoroutine (ParseSpecialTags (currentLine.inkTags));
                 m_currentDialogBox.SpawnTextObject (currentLine.displayText);
                 m_dialogueShownEvent.Invoke (currentLine);
-                yield return StartCoroutine (ParseSpecialTags (currentLine.inkTags));
                 yield return new WaitUntil (() => m_currentDialogBox.m_canContinue);
                 if (m_currentDialogBox.HasContinueButton) {
                     m_currentDialogBox.m_canContinue = false;
@@ -116,6 +117,7 @@ namespace InkEngine {
                         set.Item2.onClick.AddListener (() => PressOptionButton (set.Item1, set.Item2, allButtons));
                     }
                     m_optionPressed = false;
+                    m_waitingOnOptionPress = true;
                     m_currentDialogBox.SetContinueButtonActive (false);
                     m_choicesShownEvent.Invoke (allButtons);
                     yield return new WaitUntil (() => m_optionPressed);
@@ -132,6 +134,7 @@ namespace InkEngine {
         void PressOptionButton (InkChoiceLine optionButton, Button selectedButton, List < (InkChoiceLine, Button) > allButtons) {
             // We only press one
             m_optionPressed = true;
+            m_waitingOnOptionPress = false;
             InvokeDialogueEvents (optionButton.choiceText);
             PlayChoice (optionButton.choice);
             // Make the selected button uninteractable but stay behind, hide all the others
@@ -159,9 +162,11 @@ namespace InkEngine {
 
         IEnumerator ParseSpecialTags (List<string> tags) {
             // These are just hard-coded Ink tags we might want to use for various things to do with the writer...
-            if (tags.Contains ("pause")) {
-                PauseWriter (true);
-                yield return new WaitUntil (() => m_currentDialogBox.m_canContinue);
+            if (tags.Contains ("hideDialogue")) {
+                CloseCurrentDialogBox (false);
+            }
+            if (tags.Contains ("showDialogue")) {
+                OpenCurrentDialogBox (false);
             }
             foreach (string tag in tags) {
                 if (tag.Contains ("wait.")) {
@@ -169,6 +174,11 @@ namespace InkEngine {
                     float waitTime = float.Parse (tagNr);
                     yield return new WaitForSeconds (waitTime);
                 }
+            }
+            // Keep this one at the bottom, or it will pause before the other tags!
+            if (tags.Contains ("pause")) {
+                PauseWriter (true);
+                yield return new WaitUntil (() => m_currentDialogBox.m_canContinue);
             }
         }
 
@@ -189,7 +199,9 @@ namespace InkEngine {
             } else {
                 if (m_displayCoroutine != null) {
                     m_currentDialogBox.m_canContinue = true;
-                    m_currentDialogBox.SetContinueButtonActive (true);
+                    if (!m_waitingOnOptionPress) {
+                        m_currentDialogBox.SetContinueButtonActive (true);
+                    };
                 }
             }
         }

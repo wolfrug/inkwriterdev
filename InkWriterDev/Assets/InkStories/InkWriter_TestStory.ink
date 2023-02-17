@@ -1,4 +1,8 @@
 VAR trackableVariable = 0
+LIST MainInventory = Oval, (Hexagon), Square
+VAR Oval_stack = 0
+
+->exampleInventoryUse
 
 ===function IsInteractable(b)
 {b:
@@ -7,6 +11,21 @@ INTERACTABLE(true)
 INTERACTABLE(false)
 }
 
+===function alterStack(item, amount)
+{item:
+    - Oval:
+    ~Oval_stack += amount
+        {Oval_stack<0:
+            ~Oval_stack = 0
+            ~MainInventory-=Oval
+        }
+    {Oval_stack>10:
+        ~Oval_stack = 10
+    }
+}
+{not (MainInventory?item) && amount > 0:
+~MainInventory+=item
+}
 
 ==start
 PLAYER(left, nohat) This is on the left, also I have a portrait sans hat.
@@ -49,6 +68,36 @@ Welp, that was that. Let's load the other scene back.
 Okely, fine by me.
 - 
 ->END
+
+==exampleInventoryUse
+Hi there, this is a very simple ink inventory example. To work, it needs a LIST with all the items (their name in the list == ID of the inventory item data). The name of the LIST in turn corresponds to the ID of the inventory.
+
+- (options)
++ {Oval_stack<10} [Add an Oval.]
+{alterStack(Oval, 1)}
+We have a simple tag set up to tell the inventory to update (using a listener). Also Ovals are stackable, and we have our own function for that! #updateInventory
++ {MainInventory?Oval} [Remove an Oval.]
+{alterStack(Oval, -1)}
+We have a simple tag set up to tell the inventory to update (using a listener). Also Ovals are stackable, and we have our own function for that! #updateInventory
+
++ {not (MainInventory?Hexagon)} [Add a Hexagon.]
+~MainInventory+=Hexagon
+We have a simple tag set up to tell the inventory to update (using a listener). #updateInventory
+
++ {(MainInventory?Hexagon)} [Remove a Hexagon.]
+~MainInventory-=Hexagon
+We have a simple tag set up to tell the inventory to update (using a listener). #updateInventory
+
++ {not (MainInventory?Square)} [Add a Square.]
+~MainInventory+=Square
+We have a simple tag set up to tell the inventory to update (using a listener). #updateInventory
+
++ {(MainInventory?Square)} [Remove a Square.]
+~MainInventory-=Square
+We have a simple tag set up to tell the inventory to update (using a listener). #updateInventory
+- 
+->options
+
 
 ==exampleStringTable
 PLAYER_BARK() This is a player bark.

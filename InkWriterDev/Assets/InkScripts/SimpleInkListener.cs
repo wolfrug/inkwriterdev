@@ -69,6 +69,9 @@ namespace InkEngine {
             foreach (InkFunctionEvent evt in m_functionEvents) { // adds the ones added in the editor initially
                 AddNewFunctionEvent (evt);
             }
+            if (m_listenTarget == null) {
+                Debug.LogError ("No writer assigned to listener! Please assign a writer to it in the editor.");
+            }
             m_listenTarget.m_textFunctionFoundEvent.AddListener (OnFunctionEvent);
             m_listenTarget.m_inkTagFoundEvent.AddListener (OnTagEvent);
         }
