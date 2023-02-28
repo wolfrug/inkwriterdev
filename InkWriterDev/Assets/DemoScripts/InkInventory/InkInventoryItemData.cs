@@ -9,9 +9,9 @@ public class InkInventoryItemData : ScriptableObject {
     public InkStoryData m_storyData;
     public string m_id;
     public string m_displayName;
-    [NaughtyAttributes.ShowAssetPreview]
+    //[NaughtyAttributes.ShowAssetPreview]
     public Sprite m_image;
-    [Multiline]
+    [TextArea]
     public string m_description;
     [Tooltip ("If it is set to stackable, make sure you have an Ink variable named <ID of item>_stack!")]
     public bool m_stackable = false;
