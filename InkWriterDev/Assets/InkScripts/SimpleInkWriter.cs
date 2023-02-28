@@ -168,6 +168,9 @@ namespace InkEngine {
             if (tags.Contains ("showDialogue")) {
                 OpenCurrentDialogBox (false);
             }
+            if (tags.Contains ("continue")) {
+                m_currentDialogBox.m_canContinue = true;
+            }
             foreach (string tag in tags) {
                 if (tag.Contains ("wait.")) {
                     string tagNr = tag.Replace ("wait.", ""); // remove the wait

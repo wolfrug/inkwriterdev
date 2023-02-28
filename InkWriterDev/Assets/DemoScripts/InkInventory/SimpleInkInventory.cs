@@ -5,10 +5,12 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class SimpleInkInventory : MonoBehaviour {
+    public GameObject m_activeSelf;
     public Transform m_itemParent;
     public string m_inventoryId = "";
     public InkInventoryData m_data;
     public InkInventoryManager m_manager;
+    public List<SimpleInkInventoryBox> m_spawnedBoxes = new List<SimpleInkInventoryBox> { };
 
     void Start () {
         if (m_manager == null) {
@@ -22,6 +24,17 @@ public class SimpleInkInventory : MonoBehaviour {
                 UpdateCurrentInventory ();
             };
         }
+        if (m_activeSelf == null) {
+            m_activeSelf = m_itemParent.gameObject;
+        }
+    }
+    public bool Active {
+        get {
+            return m_activeSelf.activeSelf;
+        }
+        set {
+            m_activeSelf.SetActive (value);
+        }
     }
 
     public void UpdateInventory (InkInventoryData data) {
@@ -30,7 +43,9 @@ public class SimpleInkInventory : MonoBehaviour {
         if (m_data != null) {
             m_inventoryId = m_data.m_id;
             foreach (InkInventoryItemData item in data.m_contents) {
-                Instantiate (item.m_prefab, m_itemParent).GetComponent<SimpleInkInventoryBox> ().SetItem (item);
+                SimpleInkInventoryBox newBox = Instantiate (item.m_prefab, m_itemParent).GetComponent<SimpleInkInventoryBox> ();
+                newBox.SetItem (item);
+                m_spawnedBoxes.Add (newBox);
             }
         };
     }
@@ -48,12 +63,17 @@ public class SimpleInkInventory : MonoBehaviour {
     }
 
     public void UpdateCurrentInventory () {
-        m_data.UpdateFromInk ();
-        UpdateInventory (m_data);
+        if (m_data != null) {
+            m_data.UpdateFromInk ();
+            UpdateInventory (m_data);
+        } else {
+            Debug.LogWarning ("Cannot update inventory with name " + gameObject.name + " because it has no inventory data set!");
+        }
     }
     void ClearInventory () {
         foreach (Transform child in m_itemParent) {
             Destroy (child.gameObject);
         }
+        m_spawnedBoxes.Clear ();
     }
 }

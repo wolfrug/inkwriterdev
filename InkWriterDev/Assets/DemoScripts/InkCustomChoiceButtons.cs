@@ -12,14 +12,19 @@ namespace InkEngine {
     public class CustomInkChoiceButton {
         public InkFunctionEvent targetButtonFunction;
         public Button assignableButton;
+        public CustomInkChoiceButton (InkFunctionEvent newButtonFunction, Button newAssignableButton) {
+            targetButtonFunction = newButtonFunction;
+            assignableButton = newAssignableButton;
+        }
     }
     public class InkCustomChoiceButtons : MonoBehaviour { // This script lets you set up custom choice buttons based on what's in the gathered choices
         public SimpleInkWriter m_targetWriter; // writer that is used to play any preceding text lines & that we watch for appropriate gather choices
-        public CustomInkChoiceButton[] m_customButtons;
+        public List<CustomInkChoiceButton> m_customButtons = new List<CustomInkChoiceButton> { };
 
         public bool m_hideWriterIfFound = true; // hides the dialog box if a custom button is found, e.g. because it's on a map or something
         public bool m_hideOriginalIfFound = true; // hides the original button if reassigned to a custom button
         public bool m_setTextIfFound = true; // sets the text on the assignable button in an ugly way to the button text of the...button
+        public bool m_keepListsClean = true; // automatically cleans up the dictionaries/lists before checking anything - set to false if you prefer to do it yourself
         public DialogueOptionsPresentedEvent m_onButtonFoundEvent;
         private Dictionary<string, List<CustomInkChoiceButton>> m_inkFunctionDict = new Dictionary<string, List<CustomInkChoiceButton>> { };
 
@@ -32,7 +37,7 @@ namespace InkEngine {
 
         }
         void Start () {
-            m_targetWriter.m_choicesShownEvent.AddListener (CheckChoices);
+            m_targetWriter.m_choicesShownEvent.AddListener (CheckChoices); // Add the listener to any choices!
             foreach (CustomInkChoiceButton btn in m_customButtons) {
                 m_targetWriter.m_manager.AddSearchableFunction (new InkTextVariable {
                     variableName = btn.targetButtonFunction.targetVariable,
@@ -47,6 +52,9 @@ namespace InkEngine {
             } else {
                 m_inkFunctionDict.Add (evt.targetButtonFunction.targetVariable, new List<CustomInkChoiceButton> { evt });
             }
+            if (!m_customButtons.Contains (evt)) {
+                m_customButtons.Add (evt);
+            };
         }
         public void SetButtonInteractable (CustomInkChoiceButton button, bool interactable) {
             button.assignableButton.interactable = interactable;
@@ -97,6 +105,7 @@ namespace InkEngine {
                 Debug.Log ("This choice line had no variables");
                 return null;
             }
+            if (m_keepListsClean) { CleanFunctionDictionary (); };
             foreach (CustomInkChoiceButton btn in m_customButtons) {
                 string variableName = btn.targetButtonFunction.targetVariable;
                 List<CustomInkChoiceButton> functionEvents = new List<CustomInkChoiceButton> { };
@@ -116,6 +125,25 @@ namespace InkEngine {
                 }
             }
             return null;
+        }
+        void CleanFunctionDictionary () {
+            // Cleans the function dictionary of any null entries
+            List<string> variablesToBeRemoved = new List<string> ();
+            foreach (KeyValuePair<string, List<CustomInkChoiceButton>> kvp in m_inkFunctionDict) {
+                foreach (CustomInkChoiceButton nullEntry in kvp.Value.FindAll ((x) => x.assignableButton == null)) {
+                    kvp.Value.Remove (nullEntry);
+                    // Also remove it from m_customButtons list
+                    if (m_customButtons.Contains (nullEntry)) {
+                        m_customButtons.Remove (nullEntry);
+                    }
+                }
+                if (kvp.Value.Count < 1) {
+                    variablesToBeRemoved.Add (kvp.Key);
+                }
+            }
+            foreach (string variable in variablesToBeRemoved) {
+                m_inkFunctionDict.Remove (variable);
+            }
         }
 
     }

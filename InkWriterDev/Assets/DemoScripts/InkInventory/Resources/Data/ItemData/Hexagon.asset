@@ -17,5 +17,5 @@ MonoBehaviour:
   m_displayName: Hexagon
   m_image: {fileID: -2135585597343286014, guid: 5aa8b770bc43046bc8d993d0d5b7f4a5, type: 3}
   m_description: A nice Hexagon.
-  m_maxStack: 1
-  m_prefab: {fileID: 3485106938093570340, guid: 9a40f6a39f5adda40b36174627e6b657, type: 3}
+  m_stackable: 0
+  m_prefab: {fileID: 4463834290820371815, guid: fea5ea05aa88e2c4b9dc71bdaae52127, type: 3}

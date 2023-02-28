@@ -18,6 +18,19 @@ namespace InkEngine {
         public ArgumentRequirements argumentRequirement;
         public TextFunctionFoundEvent onEvent;
 
+        public InkFunctionEvent (string newTargetVariable, List<string> newtargetArguments, ArgumentRequirements newArgumentRequirement, TextFunctionFoundEvent newFunctionFoundEvent) {
+            targetVariable = newTargetVariable;
+            targetArguments = newtargetArguments.ToArray ();
+            argumentRequirement = newArgumentRequirement;
+            onEvent = newFunctionFoundEvent;
+        }
+        public InkFunctionEvent (string newTargetVariable, string[] newtargetArguments, ArgumentRequirements newArgumentRequirement, TextFunctionFoundEvent newFunctionFoundEvent) {
+            targetVariable = newTargetVariable;
+            targetArguments = newtargetArguments;
+            argumentRequirement = newArgumentRequirement;
+            onEvent = newFunctionFoundEvent;
+        }
+
         public bool ArgumentMatch (List<string> arguments) {
             if (argumentRequirement == ArgumentRequirements.ANY_OF) {
                 foreach (string trg in targetArguments) {

@@ -17,5 +17,5 @@ MonoBehaviour:
   m_displayName: Square
   m_image: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_description: A solid Square.
-  m_maxStack: 1
-  m_prefab: {fileID: 3485106938093570340, guid: 9a40f6a39f5adda40b36174627e6b657, type: 3}
+  m_stackable: 0
+  m_prefab: {fileID: 4463834290820371815, guid: fea5ea05aa88e2c4b9dc71bdaae52127, type: 3}

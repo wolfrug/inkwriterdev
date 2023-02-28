@@ -10,6 +10,8 @@ public class SimpleInkInventoryBox : MonoBehaviour {
     public TextMeshProUGUI m_nameText;
     public TextMeshProUGUI m_descriptionText;
     public TextMeshProUGUI m_stackText;
+    [Tooltip ("To add UI selectables, e.g. buttons")]
+    public Selectable m_selectable;
 
     public void SetItem (InkInventoryItemData data) {
         m_data = data;
