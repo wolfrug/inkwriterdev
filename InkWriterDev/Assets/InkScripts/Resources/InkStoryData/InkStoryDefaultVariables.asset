@@ -9,8 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9be7fad9af1aeb47955c20e48feff60, type: 3}
-  m_Name: InkStoryObject
+  m_Script: {fileID: 11500000, guid: e0c7dc6e097dc004ca052f471adb6e28, type: 3}
+  m_Name: InkStoryDefaultVariables
   m_EditorClassIdentifier: 
   m_ID: default
-  m_inkJsonAsset: {fileID: 4900000, guid: 92bab6750444ee94b986a2eb8472a27d, type: 3}
+  m_variables:
+  - variableName: PLAYER

@@ -8,7 +8,7 @@ public class SimpleBarkStringtable : MonoBehaviour {
     public string m_stringtableKnot;
 
     public void PlayRandomBark (string targetBarker) { // makes a stringtable from the target knot, plays a random entry
-        InkDialogueLine[] allLines = m_targetWriter.m_manager.CreateStringArrayKnot (m_stringtableKnot, null);
+        InkDialogueLine[] allLines = m_targetWriter.m_storyData.CreateStringArrayKnot (m_stringtableKnot, null);
         List<InkDialogueLine> targetLines = new List<InkDialogueLine> (allLines);
         targetLines = targetLines.FindAll ((x) => x.HasVariable (targetBarker));
         /*foreach (InkDialogueLine line in targetLines) {
@@ -22,7 +22,7 @@ public class SimpleBarkStringtable : MonoBehaviour {
         }
     }
     public void PlayFullArgumentBark (string targetBarker, string targetArgument) { // makes a stringtable and plays everything from the given argument 
-        InkDialogueLine[] allLines = m_targetWriter.m_manager.CreateStringArrayKnot (m_stringtableKnot, null);
+        InkDialogueLine[] allLines = m_targetWriter.m_storyData.CreateStringArrayKnot (m_stringtableKnot, null);
         List<InkDialogueLine> targetLines = new List<InkDialogueLine> (allLines);
         targetLines = targetLines.FindAll ((x) => x.HasVariableWithArgument (targetBarker, targetArgument));
         /*foreach (InkDialogueLine line in targetLines) {

@@ -33,7 +33,7 @@ public class InkInventoryItemData : ScriptableObject {
     public void UpdateStackFromInk () { // update stack from ink
         if (m_stackable) { // if it is stackable that is
             if (m_storyData != null) {
-                int stackVariable = (int) m_storyData.m_inkStory.variablesState[m_id + m_stackVariableSuffix];
+                int stackVariable = (int) m_storyData.InkStory.variablesState[m_id + m_stackVariableSuffix];
                 Stack = stackVariable;
             }
         }
@@ -41,7 +41,7 @@ public class InkInventoryItemData : ScriptableObject {
     public void UpdateStackToInk () { // update ink variable with current stack
         if (m_stackable) { // we don't bother even trying if maxstack is just 1
             if (m_storyData != null) {
-                m_storyData.m_inkStory.variablesState[m_id + m_stackVariableSuffix] = Stack;
+                m_storyData.InkStory.variablesState[m_id + m_stackVariableSuffix] = Stack;
             }
         }
     }

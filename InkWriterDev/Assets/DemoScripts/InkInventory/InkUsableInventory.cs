@@ -17,7 +17,7 @@ public class InkUsableInventory : MonoBehaviour {
         if (m_choiceButtonSetup == null) {
             m_choiceButtonSetup = GetComponent<InkCustomChoiceButtons> ();
         }
-        m_choiceButtonSetup.m_targetWriter.m_manager.AddSearchableFunction (new InkTextVariable {
+        m_choiceButtonSetup.m_targetWriter.m_storyData.AddSearchableFunction (new InkTextVariable {
             variableName = m_buttonFindFunction.targetVariable
         });
     }

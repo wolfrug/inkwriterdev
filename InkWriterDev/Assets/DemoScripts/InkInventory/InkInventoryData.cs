@@ -66,7 +66,7 @@ public class InkInventoryData : ScriptableObject {
         //Debug.Log ("Attempting to update from ink for id " + m_id);
         // Id must equal the name of the variable in Ink
         if (m_storyData != null) {
-            var newList = m_storyData.m_inkStory.variablesState[m_id] as Ink.Runtime.InkList;
+            var newList = m_storyData.InkStory.variablesState[m_id] as Ink.Runtime.InkList;
             ClearInventory ();
             foreach (var item in newList) {
                 AddItem (item.Key.itemName);
@@ -78,12 +78,12 @@ public class InkInventoryData : ScriptableObject {
     public void UpdateToInk () {
         // Note: there must be a LIST idName definition in ink, with -all possible entries- to that list for this to work properly
         if (m_storyData != null) {
-            var newList = new Ink.Runtime.InkList (m_id, m_storyData.m_inkStory);
+            var newList = new Ink.Runtime.InkList (m_id, m_storyData.InkStory);
             foreach (InkInventoryItemData item in m_contents) {
                 newList.AddItem (item.m_id);
                 item.UpdateStackToInk ();
             }
-            m_storyData.m_inkStory.variablesState[m_id] = newList;
+            m_storyData.InkStory.variablesState[m_id] = newList;
         } else {
             Debug.LogWarning ("Cannot find loaded Ink Story");
         }

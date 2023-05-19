@@ -24,7 +24,7 @@ namespace InkEngine {
     public class WriterEvent : UnityEvent<SimpleInkWriter> { }
     public class SimpleInkWriter : MonoBehaviour {
 
-        public InkStoryStateManager m_manager;
+        public InkStoryData m_storyData;
         public SimpleInkDialogBox m_currentDialogBox;
 
         [Tooltip ("For specific text functions, e.g. PLAYER(sad, right)")]
@@ -39,20 +39,20 @@ namespace InkEngine {
         private bool m_waitingOnOptionPress = false;
         private Coroutine m_displayCoroutine = null;
         void Awake () {
-            if (m_manager == null) {
-                m_manager = FindObjectOfType<InkStoryStateManager> ();
+            if (m_storyData == null) {
+                m_storyData = Resources.LoadAll<InkStoryData> ("InkStoryData") [0];
             }
             // Add the default searchable INTERACTABLE tag - used by choices to make them inactive if this function tag is found
-            m_manager.AddSearchableFunction (new InkTextVariable {
+            m_storyData.AddSearchableFunction (new InkTextVariable {
                 variableName = "INTERACTABLE",
                     VariableArguments = new List<string> { "false" }
             });
         }
 
         public void PlayKnot (string knotName) { // play directly from a knot
-            if (m_manager.IsLoaded ()) {
+            if (m_storyData.IsLoaded ()) {
                 List<InkChoiceLine> gatherChoices = new List<InkChoiceLine> { };
-                InkDialogueLine[] dialogueLines = m_manager.CreateStringArrayKnot (knotName, gatherChoices);
+                InkDialogueLine[] dialogueLines = m_storyData.CreateStringArrayKnot (knotName, gatherChoices);
                 if (m_displayCoroutine != null) {
                     StopCoroutine (m_displayCoroutine);
                 } else {
@@ -62,9 +62,9 @@ namespace InkEngine {
             };
         }
         public void PlayChoice (Choice choice) { // play from a choice - mainly used internally
-            if (m_manager.IsLoaded ()) {
+            if (m_storyData.IsLoaded ()) {
                 List<InkChoiceLine> gatherChoices = new List<InkChoiceLine> { };
-                InkDialogueLine[] dialogueLines = m_manager.CreateStringArrayChoice (choice, gatherChoices);
+                InkDialogueLine[] dialogueLines = m_storyData.CreateStringArrayChoice (choice, gatherChoices);
                 if (m_displayCoroutine != null) {
                     StopCoroutine (m_displayCoroutine);
                 } else {
@@ -75,7 +75,7 @@ namespace InkEngine {
         }
 
         public void PlayDialogueLines (InkDialogueLine[] targetLines) { // just provide the lines directly
-            if (m_manager.IsLoaded ()) {
+            if (m_storyData.IsLoaded ()) {
                 if (m_displayCoroutine != null) {
                     StopCoroutine (m_displayCoroutine);
                 } else {

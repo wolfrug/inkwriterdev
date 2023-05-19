@@ -39,7 +39,7 @@ namespace InkEngine {
         void Start () {
             m_targetWriter.m_choicesShownEvent.AddListener (CheckChoices); // Add the listener to any choices!
             foreach (CustomInkChoiceButton btn in m_customButtons) {
-                m_targetWriter.m_manager.AddSearchableFunction (new InkTextVariable {
+                m_targetWriter.m_storyData.AddSearchableFunction (new InkTextVariable {
                     variableName = btn.targetButtonFunction.targetVariable,
                         VariableArguments = btn.targetButtonFunction.targetArguments.ToList ()
                 });
