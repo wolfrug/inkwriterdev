@@ -64,6 +64,22 @@ namespace InkEngine {
             }
             return false;
         }
+        public InkTextVariable GetVariable (string variableName) {
+            if (!HasVariable (variableName)) {
+                return null;
+            }
+            return inkVariables.Find ((x) => x.variableName == variableName);
+        }
+        public InkTextVariable GetVariableWithArgument (string variable, string argument) {
+            foreach (InkTextVariable inkVariable in inkVariables) {
+                if (inkVariable.variableName == variable) {
+                    if (inkVariable.HasArgument (argument)) {
+                        return inkVariable;
+                    }
+                }
+            }
+            return null;
+        }
     }
 
     [System.Serializable]
