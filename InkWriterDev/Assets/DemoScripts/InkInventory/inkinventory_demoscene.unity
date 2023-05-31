@@ -2547,6 +2547,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: InkStoryStateManager
       objectReference: {fileID: 0}
+    - target: {fileID: 3848268096883712751, guid: ba4fc07804a0e5c4ea78a1c13e6d6cc8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ba4fc07804a0e5c4ea78a1c13e6d6cc8, type: 3}
 --- !u!1001 &1057577275240020859
