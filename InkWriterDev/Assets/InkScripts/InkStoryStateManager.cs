@@ -8,8 +8,6 @@ namespace InkEngine {
 
     public class InkStoryStateManager : MonoBehaviour {
         public InkStoryData m_storyObject;
-        public InkStoryVariableData m_defaultTextVariables; // a scriptable object with the default ones, for quick lookup
-        public List<InkTextVariable> m_searchableTextVariables = new List<InkTextVariable> { }; // which text variables we are searching for & parsing
         public bool m_startOnInit = true;
 
         void Awake () {
@@ -31,9 +29,6 @@ namespace InkEngine {
         public bool IsLoaded () {
             return m_storyObject.IsLoaded ();
         }
-
-      
-
         
     }
 }

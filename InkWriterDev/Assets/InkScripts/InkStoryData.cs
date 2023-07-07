@@ -156,38 +156,50 @@ namespace InkEngine {
 
         // Creates a string array of all the strings in a specific knot, and optionally the choices at the end
         // Note: create the List<Choice> when calling this and the list will be automagically modified (we don't return a new list)
-        public InkDialogueLine[] CreateStringArrayKnot (string targetKnot, List<InkChoiceLine> gatherChoices) {
+        public InkDialogueLine[] CreateStringArrayKnot (string targetKnot, List<InkChoiceLine> gatherChoices, string optionalFlow = "default") {
+            if (optionalFlow != "default") {
+                InkStory.SwitchFlow (optionalFlow);
+            }
             InkStory.ChoosePathString (targetKnot);
-            InkDialogueLine[] returnArray = CreateDialogueArray ();
+            InkDialogueLine[] returnArray = CreateDialogueArray (optionalFlow);
             if (gatherChoices != null) {
                 foreach (Choice choice in InkStory.currentChoices) {
                     gatherChoices.Add (ParseInkChoice (choice));
                     //Debug.Log ("Added end choice with name: " + choice.text);
                 }
             }
+            if (optionalFlow != "default") {
+                InkStory.RemoveFlow (optionalFlow);
+            }
             return returnArray;
         }
 
         // Creates a list of strings starting from a choice, and then optionally gathers the choices
-        public InkDialogueLine[] CreateStringArrayChoice (Choice startChoice, List<InkChoiceLine> gatherChoices) {
+        public InkDialogueLine[] CreateStringArrayChoice (Choice startChoice, List<InkChoiceLine> gatherChoices, string optionalFlow = "default") {
+            if (optionalFlow != "default") {
+                InkStory.SwitchFlow (optionalFlow);
+            }
             if (InkStory.currentChoices.Contains (startChoice)) {
                 InkStory.ChooseChoiceIndex (startChoice.index);
             } else {
                 Debug.LogWarning ("Tried to choose a choice that is no longer among the Inkwriter's available choices!");
                 InkStory.ChoosePath (startChoice.targetPath);
             }
-            InkDialogueLine[] returnArray = CreateDialogueArray ();
+            InkDialogueLine[] returnArray = CreateDialogueArray (optionalFlow);
             if (gatherChoices != null) {
                 foreach (Choice choice in InkStory.currentChoices) {
                     gatherChoices.Add (ParseInkChoice (choice));
                     //Debug.Log ("Added end choice with name: " + choice.text);
                 }
             }
+            if (optionalFlow != "default") {
+                InkStory.RemoveFlow (optionalFlow);
+            }
             return returnArray;
         }
 
         // where the magic happens - actually goes through the ink file and "continues" things
-        InkDialogueLine[] CreateDialogueArray () {
+        InkDialogueLine[] CreateDialogueArray (string targetFlow = "default") {
             string returnText = "";
             List<InkDialogueLine> returnArray = new List<InkDialogueLine> { };
             while (InkStory.canContinue) {
@@ -198,6 +210,7 @@ namespace InkEngine {
                 };
                 returnArray.Add (newLine);
             }
+
             return returnArray.ToArray ();
         }
 

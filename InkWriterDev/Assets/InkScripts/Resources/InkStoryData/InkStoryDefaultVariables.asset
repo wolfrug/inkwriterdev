@@ -16,3 +16,14 @@ MonoBehaviour:
   m_variables:
   - variableName: PLAYER
   - variableName: USE_ITEM
+  - variableName: SET_OPTIONBOX
+  - variableName: SET_TEXTBOX
+  - variableName: SET_BUTTON_GRAPHIC
+  - variableName: SET_BUTTON_TEXT
+  - variableName: LOAD_SCENE
+  - variableName: PLAYER_BARK
+  - variableName: OTHER_BARK
+  - variableName: SET_STORY_IMAGE
+  - variableName: SET_STORY_TEXT
+  m_sprites: []
+  m_prefabs: []

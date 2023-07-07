@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SimpleInkDialogBox : MonoBehaviour {
+public class InkDialogBox : MonoBehaviour {
 
     [Tooltip ("This is the box that can be safely turned off when not in use")]
     public GameObject m_activeSelf;
@@ -12,19 +12,12 @@ public class SimpleInkDialogBox : MonoBehaviour {
     public Transform m_optionsParent;
     public GameObject m_textBoxPrefab;
     public GameObject m_optionBoxPrefab;
-    public Button m_continueButton;
-    public Button m_skipButton; // put this -above- the continue button ;)
-    public bool m_canContinue;
+    
     // Start is called before the first frame update
-    void Start () {
-        if (m_continueButton != null) {
-            m_continueButton.onClick.AddListener (() => m_canContinue = true);
-        } else {
-            m_canContinue = true;
-        }
+    public virtual void Start () {
     }
 
-    public bool Active {
+    public virtual bool Active {
         get {
             return m_activeSelf.activeInHierarchy;
         }
@@ -32,57 +25,35 @@ public class SimpleInkDialogBox : MonoBehaviour {
             m_activeSelf.SetActive (value);
         }
     }
-    public void SetContinueButtonActive (bool active) {
-        if (HasContinueButton) {
-            m_continueButton.gameObject.SetActive (active);
-        }
-    }
 
-    public void SetSkipButtonActive (bool active) {
-        if (HasSkipButton) {
-            m_skipButton.gameObject.SetActive (active);
-        }
-    }
-
-    public bool HasContinueButton {
-        get {
-            return m_continueButton != null;
-        }
-    }
-    public bool HasSkipButton {
-        get {
-            return m_skipButton != null;
-        }
-    }
-
-    public GameObject SpawnTextObject (string text) {
+    public virtual GameObject SpawnTextObject (string text) {
         GameObject inkTextObject = Instantiate (m_textBoxPrefab, m_textParent);
         inkTextObject.GetComponentInChildren<TextMeshProUGUI> ().SetText (text);
         LayoutRebuilder.ForceRebuildLayoutImmediate (m_textParent.GetComponent<RectTransform> ());
         return inkTextObject;
     }
-    public GameObject SpawnButtonObject (string text) {
+    public virtual GameObject SpawnButtonObject (string text) {
         GameObject inkOptionButton = Instantiate (m_optionBoxPrefab, m_optionsParent);
         inkOptionButton.GetComponentInChildren<TextMeshProUGUI> ().SetText (text);
         LayoutRebuilder.ForceRebuildLayoutImmediate (m_optionsParent.GetComponent<RectTransform> ());
         return inkOptionButton;
     }
-    public GameObject SpawnPrefabInText (GameObject prefab) {
+    public virtual GameObject SpawnPrefabInText (GameObject prefab) {
         GameObject inkObject = Instantiate (prefab, m_textParent);
         LayoutRebuilder.ForceRebuildLayoutImmediate (m_textParent.GetComponent<RectTransform> ());
         return inkObject;
     }
-    public GameObject SpawnPrefabInOptions (GameObject prefab) {
+    public virtual GameObject SpawnPrefabInOptions (GameObject prefab) {
         GameObject inkObject = Instantiate (prefab, m_optionsParent);
         LayoutRebuilder.ForceRebuildLayoutImmediate (m_optionsParent.GetComponent<RectTransform> ());
         return inkObject;
     }
-    public void ClearAllText () {
+    public virtual void ClearAllText () {
         foreach (Transform child in m_textParent) {
             Destroy (child.gameObject);
         }
     }
-    public void ClearAllOptions () {
+    public virtual void ClearAllOptions () {
         foreach (Transform child in m_optionsParent) {
             Destroy (child.gameObject);
         }

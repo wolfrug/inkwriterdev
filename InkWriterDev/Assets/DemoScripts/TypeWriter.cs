@@ -32,7 +32,7 @@ public class TypeWriter : MonoBehaviour {
         // VERY UGLY HAHA
         if (skipButton_ == null) {
             if (transform.root.GetComponent<InkEngine.SimpleInkWriter> () != null) {
-                skipButton_ = transform.root.GetComponent<InkEngine.SimpleInkWriter> ().m_currentDialogBox.m_skipButton;
+                skipButton_ = transform.root.GetComponent<InkEngine.SimpleInkWriter> ().CurrentDialogBoxSimple.m_skipButton;
             };
         }
         if (skipButton_ != null) {

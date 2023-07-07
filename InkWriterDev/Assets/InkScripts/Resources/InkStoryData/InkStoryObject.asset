@@ -15,6 +15,4 @@ MonoBehaviour:
   m_ID: default
   m_inkJsonAsset: {fileID: 4900000, guid: 92bab6750444ee94b986a2eb8472a27d, type: 3}
   m_defaultTextVariables: {fileID: 11400000, guid: f1180ca2024c19542bff6ce2cb12ad5e, type: 2}
-  m_searchableTextVariables:
-  - variableName: INTERACTABLE
-  - variableName: PLAYER
+  m_searchableTextVariables: []

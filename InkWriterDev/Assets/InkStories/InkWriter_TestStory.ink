@@ -28,6 +28,41 @@ INTERACTABLE(false)
 }
 
 ==start
+#clearText
+Welcome to Wolfrug's Ink writer dev scene!
+
+This is my personal project to make Ink useable inside Unity, with a bunch of functions and functionalities I've found especially handy. Most of these exist inside the Demo folder - this is merely the most base implementation.
+
+At the center of it all is the InkDialogueLine. This is a structure that picks up text from any ink line, and interprets it as a kind of function call. For example you might write MOVE_TO_ROOM(thisroom, fast), which could then be interpreted and picked up by any other script.
+
+The goal is to let you control things directly using Ink, and very swiftly add new functions in as needed. It also works with Ink tags, although the weakness with tags is they cannot convey information (such as variables).
+
+Choices also have their own InkChoiceLine which works in nearly the same way, and lets you run 'functions' when clicking the option buttons (or when displaying them).
+
+The InkVariables that are looked for are set up in Scriptable Objects, that also contain most of the important code, meaning as long as you have access to them, you can do most of the things this framework is meant to do.
+
++ [I'd like to know more.]
+#clearText
+First of all, I used an ink tag here to clear the text. For these things I am using the "Ink Listener" object, which is hooked up to this writer. I have also hooked it up to listen to the variable \PLAYER\, with the arguments "red" and "green". Once it hears those, it will activate either a red or green ball.
+->redGreenExample
++ [Close]
+PLAYER(end)
+->END
+
+
+=redGreenExample
++ [Activate Red]
+PLAYER(red)
++ [Activate Green]
+PLAYER(green)
++ [Close]
+PLAYER(end)
+->END
+- 
+->redGreenExample
+
+
+==startAdvanced
 PLAYER(left, nohat) This is on the left, also I have a portrait sans hat.
 
 PLAYER(right, hat) And this is on the right. I have a hat portrait.
@@ -35,7 +70,7 @@ PLAYER(right, hat) And this is on the right. I have a hat portrait.
 ~trackableVariable++
 This is probably also on the right. Also I just increased a variable +1! It is now {trackableVariable}!
 
-PLAYER(left, hat) Then this is on the left again. I added a hat.
+PLAYER(left, hat) Then this is on the left again. I added a hat, and also changed the text to a blue one. SET_TEXTBOX(bluetext)
 
 +(option1) [This is an option that is always here.]
 PLAYER(left, nohat) Great. Hat off!
@@ -46,19 +81,34 @@ PLAYER(right, nohat) Good idea!
 PLAYER(left, nohat) Lucky us. Off with the hat.
 
 PLAYER(right, nohat) Yass.
-
++ [SET_BUTTON_GRAPHIC(left, plus) This button has a plus option.]
+Yay! Well done!
++ [SET_BUTTON_GRAPHIC(right, warning)SET_BUTTON_GRAPHIC(left, plus) This button has a warning! SET_BUTTON_TEXT(right, Danger!)]
+Oh no, why did you click it!
++ [SET_OPTIONBOX(redbutton) And this button is red!!]
+Wow, so cool.
 - 
 ->end
 ==end
 The end!
 ->END
 
+==extraText
+This is some extra text that we're showing on the side, demonstrating both flow and how you can use the base inkwriter with no bells and whistles.
+
+This will just display the text as one, with no additional thought put into it.
+
++ [Options supported!]
+Options are also supported, obviously.
+++ [Back!]
+->extraText
+
 ==continue
 Hi there. This is set in the other scene, just to show how easily variables and things carry over.
 
 In the previous scene, we increased trackableVariable to {trackableVariable}. Nice.
 
-In the previous scene, we picked option 1 {start.option1} times and option 2 {start.option2} times. Neat!
+In the previous scene, we picked option 1 {startAdvanced.option1} times and option 2 {startAdvanced.option2} times. Neat!
 
 Welp, that was that. Let's load the other scene back.
 
@@ -143,6 +193,14 @@ Fair enough.
 + [Try again.]
 ->exampleUseableInventory
 
+==exampleInkText
+This is an example of an Ink Text object, which can be quite powerful and useful. Just add it to any textmeshprougui object and hook it up to a knot.
+
+This one also shows the use of the storyoverlay, which listens to events in this text and changes images based on them. In this case, randomly switching between two possible corner images.
+
+{~SET_STORY_IMAGE(corner, dude)|SET_STORY_IMAGE(corner, mail)}
+SET_STORY_TEXT(title, Visit Count: {exampleInkText})
+->END
 ==exampleStringTable
 PLAYER_BARK() This is a player bark.
 

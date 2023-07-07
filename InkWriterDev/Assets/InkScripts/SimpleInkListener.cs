@@ -72,7 +72,7 @@ namespace InkEngine {
         public TextTagFoundEvent onEvent;
     }
     public class SimpleInkListener : MonoBehaviour {
-        public SimpleInkWriter m_listenTarget;
+        public InkWriter m_listenTarget;
         public List<InkFunctionEvent> m_functionEvents = new List<InkFunctionEvent> { };
         public List<InkTagEvent> m_tagEvents = new List<InkTagEvent> { };
 
