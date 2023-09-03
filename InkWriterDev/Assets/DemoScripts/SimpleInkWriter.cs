@@ -42,8 +42,8 @@ namespace InkEngine {
                 yield return StartCoroutine (ParseSpecialTags (currentLine.inkTags));
                 if (currentLine.displayText.Trim () != "") {
                     SpawnTextObject (currentLine);
+                    m_dialogueShownEvent.Invoke (currentLine);
                 };
-                m_dialogueShownEvent.Invoke (currentLine);
                 yield return new WaitUntil (() => CurrentDialogBoxSimple.m_canContinue);
                 if (CurrentDialogBoxSimple.HasContinueButton) {
                     CurrentDialogBoxSimple.m_canContinue = false;

@@ -11,6 +11,7 @@ namespace InkEngine {
         public string m_targetKnot;
         public string m_lineBreak = "\n";
         public bool m_updateOnEnable = true;
+        public bool m_sendGlobalFunctionEvents = true;
 
         [Tooltip ("For specific text functions, e.g. PLAYER(sad, right)")]
         public TextFunctionFoundEvent m_textFunctionFoundEvent;
@@ -49,12 +50,18 @@ namespace InkEngine {
             if (currentLine.inkVariables.Count > 0) {
                 foreach (InkTextVariable variable in currentLine.inkVariables) {
                     m_textFunctionFoundEvent.Invoke (currentLine, variable);
+                    if (m_sendGlobalFunctionEvents) {
+                        m_storyData.m_textFunctionFoundEvent.Invoke (currentLine, variable);
+                    }
                     Debug.Log ("Invoked ink function: " + variable.variableName + "(" + string.Join ("\n", variable.VariableArguments) + ")");
                 }
             }
             if (currentLine.inkTags.Count > 0) {
                 foreach (string tag in currentLine.inkTags) {
                     m_inkTagFoundEvent.Invoke (currentLine, tag);
+                    if (m_sendGlobalFunctionEvents) {
+                        m_storyData.m_inkTagFoundEvent.Invoke (currentLine, tag);
+                    }
                 }
             }
         }

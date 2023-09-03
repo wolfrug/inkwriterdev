@@ -6,6 +6,8 @@ using UnityEngine;
 using UnityEngine.UI;
 public class SimpleInkDialogBox : InkDialogBox {
     public InkStoryVariableData m_otherPrefabs;
+
+    public ScrollRectAutoScroller[] m_autoScrollers;
     public Button m_continueButton;
     public Button m_skipButton; // put this -above- the continue button ;)
     public bool m_canContinue;
@@ -46,6 +48,7 @@ public class SimpleInkDialogBox : InkDialogBox {
         GameObject inkTextObject = Instantiate (textBoxPrefab, m_textParent);
         inkTextObject.GetComponentInChildren<TextMeshProUGUI> ().SetText (text);
         LayoutRebuilder.ForceRebuildLayoutImmediate (m_textParent.GetComponent<RectTransform> ());
+        RunScrollRects();
         return inkTextObject;
     }
     public GameObject SpawnButtonObject (string text, string textObjectPrefabId = "default") {
@@ -53,7 +56,27 @@ public class SimpleInkDialogBox : InkDialogBox {
         GameObject inkOptionButton = Instantiate (optionBoxPrefab, m_optionsParent);
         inkOptionButton.GetComponentInChildren<TextMeshProUGUI> ().SetText (text);
         LayoutRebuilder.ForceRebuildLayoutImmediate (m_optionsParent.GetComponent<RectTransform> ());
+        RunScrollRects();
         return inkOptionButton;
+    }
+
+    public override GameObject SpawnPrefabInText (GameObject prefab) {
+        GameObject inkObject = Instantiate (prefab, m_textParent);
+        LayoutRebuilder.ForceRebuildLayoutImmediate (m_textParent.GetComponent<RectTransform> ());
+        RunScrollRects();
+        return inkObject;
+    }
+    public override GameObject SpawnPrefabInOptions (GameObject prefab) {
+        GameObject inkObject = Instantiate (prefab, m_optionsParent);
+        LayoutRebuilder.ForceRebuildLayoutImmediate (m_optionsParent.GetComponent<RectTransform> ());
+        RunScrollRects();
+        return inkObject;
+    }
+
+    public void RunScrollRects(){
+        foreach(ScrollRectAutoScroller autoScroller in m_autoScrollers){
+            autoScroller.ScrollDown();
+        }
     }
 
 }

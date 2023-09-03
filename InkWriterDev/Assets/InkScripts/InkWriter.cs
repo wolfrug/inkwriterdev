@@ -6,11 +6,6 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace InkEngine {
-    [System.Serializable]
-    public class TextTagFoundEvent : UnityEvent<InkDialogueLine, string> { }
-
-    [System.Serializable]
-    public class TextFunctionFoundEvent : UnityEvent<InkDialogueLine, InkTextVariable> { }
 
     [System.Serializable]
     public class DialoguePresentedEvent : UnityEvent<InkDialogueLine> { }
@@ -138,11 +133,13 @@ namespace InkEngine {
             if (currentLine.inkVariables.Count > 0) {
                 foreach (InkTextVariable variable in currentLine.inkVariables) {
                     m_textFunctionFoundEvent.Invoke (currentLine, variable);
+                    m_storyData.InvokeFunctionEvent(currentLine, variable);
                     Debug.Log ("Invoked ink function: " + variable.variableName + "(" + string.Join ("\n", variable.VariableArguments) + ")");
                 }
             }
             if (currentLine.inkTags.Count > 0) {
                 foreach (string tag in currentLine.inkTags) {
+                    m_storyData.InvokeTagEvent(currentLine, tag);
                     m_inkTagFoundEvent.Invoke (currentLine, tag);
                 }
             }

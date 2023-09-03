@@ -3,8 +3,16 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Ink.Runtime;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace InkEngine {
+
+    [System.Serializable]
+    public class TextTagFoundEvent : UnityEvent<InkDialogueLine, string> { }
+
+    [System.Serializable]
+    public class TextFunctionFoundEvent : UnityEvent<InkDialogueLine, InkTextVariable> { }
+
     [System.Serializable]
     public class InkTextVariable {
         // This represents a text variable found (and removed) from a piece of ink text
@@ -96,6 +104,11 @@ namespace InkEngine {
 
         public InkStoryVariableData m_defaultTextVariables; // a scriptable object with the default ones, for quick lookup
         public List<InkTextVariable> m_searchableTextVariables = new List<InkTextVariable> { }; // which text variables we are searching for & parsing
+
+        [Tooltip ("For specific text functions, e.g. PLAYER(sad, right)")]
+        [HideInInspector] public TextFunctionFoundEvent m_textFunctionFoundEvent;
+        [Tooltip ("For regular ink tags, e.g. #playmusic (do not include the hashtag)")]
+        [HideInInspector] public TextTagFoundEvent m_inkTagFoundEvent;
 
         public Story InkStory {
             get {
@@ -263,6 +276,15 @@ namespace InkEngine {
             returnVal.choice = newChoice;
             returnVal.choiceText = ParseInkText (newChoice.text);
             return returnVal;
+        }
+
+        public void InvokeFunctionEvent(InkDialogueLine currentLine, InkTextVariable variable){
+            Debug.Log ("Invoked global ink function event: " + variable.variableName + "(" + string.Join ("\n", variable.VariableArguments) + ")");
+            m_textFunctionFoundEvent.Invoke(currentLine, variable);
+        }
+        public void InvokeTagEvent(InkDialogueLine currentLine, string tag){
+            Debug.Log("Invoked global tag event: " + tag);
+            m_inkTagFoundEvent.Invoke(currentLine, tag);
         }
     }
 }

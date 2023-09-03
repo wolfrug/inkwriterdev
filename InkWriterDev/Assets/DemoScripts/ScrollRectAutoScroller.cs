@@ -27,13 +27,17 @@ public class ScrollRectAutoScroller : MonoBehaviour {
         }
 
         // Update any components that might resize UI elements
-        foreach (var layout in xform.GetComponents<LayoutGroup> ()) {
-            layout.CalculateLayoutInputVertical ();
-            layout.CalculateLayoutInputHorizontal ();
+        foreach (LayoutGroup layout in xform.GetComponents<LayoutGroup> ()) {
+            if (layout.GetComponent<RectTransform>() != null) {
+                layout.CalculateLayoutInputVertical ();
+                layout.CalculateLayoutInputHorizontal ();
+            }
         }
-        foreach (var fitter in xform.GetComponents<ContentSizeFitter> ()) {
-            fitter.SetLayoutVertical ();
-            fitter.SetLayoutHorizontal ();
+        foreach (ContentSizeFitter fitter in xform.GetComponents<ContentSizeFitter> ()) {
+            if (fitter.GetComponent<RectTransform>() != null) {
+                fitter.SetLayoutVertical ();
+                fitter.SetLayoutHorizontal ();
+            }
         }
     }
 }
