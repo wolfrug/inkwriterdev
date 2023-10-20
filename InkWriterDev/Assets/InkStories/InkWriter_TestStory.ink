@@ -2,7 +2,38 @@ VAR trackableVariable = 0
 LIST MainInventory = Oval, (Hexagon), Square
 VAR Oval_stack = 0
 
+VAR testList = ""
+VAR testDictionary = ""
+
 ->exampleInventoryUse
+
+EXTERNAL EXT_AddToList(x,y)
+EXTERNAL EXT_RemoveFromList(x,y)
+EXTERNAL EXT_AddToDictionary(x,y,z)
+EXTERNAL EXT_RemoveFromDictionary(x,y)
+
+===function EXT_AddToList(x,y)
+[Added {x} to the list {y}]
+~return y
+===function EXT_RemoveFromList(x,y)
+[Removed {x} from the list {y}]
+~return y
+===function EXT_AddToDictionary(x,y,z)
+[Adds the Key Value Pair ({x},{y}) to {z}]
+~return z
+
+===function EXT_RemoveFromDictionary(x,y)
+[Removes the key and value of key {x} from {y}]
+~return y
+
+===function AddToList(key, ref list)
+~list = EXT_AddToList(key, list)
+===function RemoveFromList(key, ref list)
+~list = EXT_RemoveFromList(key, list)
+===function AddToDictionary(key, value, ref list)
+~list = EXT_AddToDictionary(key, value, list)
+===function RemoveFromDictionary(key, ref list)
+~list = EXT_RemoveFromDictionary(key, list)
 
 ===function IsInteractable(b)
 {b:
@@ -220,3 +251,22 @@ PLAYER_BARK(bad) Another example of an argument bark with the argument bad.
 
 PLAYER_BARK(bad) These will also show up though in the generic list of player barks.
 ->END
+
+==exampleInkArraysStart
+->loop
+=loop
+This is an example of using some string manipulation to create a kind of dictionary or list that can be saved in Ink.
+
+Current list: {testList}
+Current dictionary: {testDictionary}
+
++ [Add to list.]
+{AddToList(loop+1, testList)}
+{AddToDictionary("loopCount", loop+1, testDictionary)}
+{AddToDictionary("testRemovable", "bla bla bla", testDictionary)}
+->loop
++ [Remove from list]
+{RemoveFromList("2", testList)}
+{RemoveFromDictionary("testRemovable", testDictionary)}
+->loop
+
