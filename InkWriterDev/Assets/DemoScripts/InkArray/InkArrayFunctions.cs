@@ -17,6 +17,8 @@ namespace InkEngine
             m_data.InkStory.BindExternalFunction("EXT_RemoveFromList", (string arg0, string arg1) => { return RemoveString(arg0, arg1); });
             m_data.InkStory.BindExternalFunction("EXT_AddToDictionary", (string arg0, string arg1, string arg2) => { return AddStringDictionary(arg0, arg1, arg2); });
             m_data.InkStory.BindExternalFunction("EXT_RemoveFromDictionary", (string arg0, string arg1) => { return RemoveStringDictionary(arg0, arg1); });
+            m_data.InkStory.BindExternalFunction("EXT_HasValue", (string arg0, string arg1) => { return ContainsValue(arg0, arg1); });
+            m_data.InkStory.BindExternalFunction("EXT_GetValue", (string arg0, string arg1) => { return GetValue(arg0, arg1); });
         }
 
         public void EventListener(InkDialogueLine line, InkTextVariable variable)
@@ -51,12 +53,20 @@ namespace InkEngine
                         m_data.InkStory.variablesState[variable.VariableArguments[1]] = newArray;
                         break;
                     }
+                case "HAS_VALUE":
+                    {
+                        int returnBool = (int)m_data.InkStory.variablesState[variable.VariableArguments[2]];
+                        string currentArray = m_data.InkStory.variablesState[variable.VariableArguments[1]] as string;
+                        returnBool = ContainsValue(variable.VariableArguments[0], currentArray) ? 1 : 0;
+                        m_data.InkStory.variablesState[variable.VariableArguments[2]] = returnBool;
+                        break;
+                    }
             }
         }
 
         public string AddString(string stringToAdd, string inkarray)
         {
-            return InkArrays.SerializeStrings<string>(new List<string> { stringToAdd}, inkarray); ;
+            return InkArrays.SerializeStrings<string>(new List<string> { stringToAdd }, inkarray); ;
         }
         public string RemoveString(string stringToRemove, string inkarray)
         {
@@ -108,6 +118,30 @@ namespace InkEngine
 
             }
             return InkArrays.SerializeProtoDictionary<string>(currentDict);
+        }
+        public bool ContainsValue(string key, string inkarray)
+        {
+            return InkArrays.HasValue(key, inkarray);
+        }
+        public string GetValue(string key, string inkarray)
+        {
+            if (InkArrays.IsProtoDictionary(inkarray))
+            {
+                return InkArrays.GetStringByKey(key, inkarray);
+            }
+            else
+            {
+                int index = -1;
+                int.TryParse(key, out index);
+                List<string> list = InkArrays.DeSerializeString(inkarray);
+                Debug.Log("Got index: " + index + " and array count: " + list.Count);
+                if (index >= 0 && index < list.Count && list.Count > 0)
+                {
+                    Debug.Log("Returning " + list[index]);
+                    return list[index];
+                }
+            }
+            return "";
         }
     }
 }

@@ -168,5 +168,18 @@ namespace InkEngine
         {
             return serializedString.Contains(delimiterMiddle.ToString());
         }
+        public static int Count(string serializedString)
+        {
+            if (IsProtoDictionary(serializedString))
+            {
+                List<KeyValuePair<string, string>> dictionary = DeSerializeProtoDictionary(serializedString);
+                return dictionary.Count;
+            }
+            else
+            {
+                List<string> list = DeSerializeString(serializedString);
+                return list.Count;
+            }
+        }
     }
 }

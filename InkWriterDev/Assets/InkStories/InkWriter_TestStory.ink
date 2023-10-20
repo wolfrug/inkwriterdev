@@ -11,6 +11,8 @@ EXTERNAL EXT_AddToList(x,y)
 EXTERNAL EXT_RemoveFromList(x,y)
 EXTERNAL EXT_AddToDictionary(x,y,z)
 EXTERNAL EXT_RemoveFromDictionary(x,y)
+EXTERNAL EXT_HasValue(x,y)
+EXTERNAL EXT_GetValue(x,y)
 
 ===function EXT_AddToList(x,y)
 [Added {x} to the list {y}]
@@ -25,6 +27,12 @@ EXTERNAL EXT_RemoveFromDictionary(x,y)
 ===function EXT_RemoveFromDictionary(x,y)
 [Removes the key and value of key {x} from {y}]
 ~return y
+===function EXT_HasValue(x,y)
+[Checks if {x} exists in list {y}]
+~return true
+===function EXT_GetValue(x,y)
+[Gets either the index {x} or the key {x} from list {y}]
+~return x
 
 ===function AddToList(key, ref list)
 ~list = EXT_AddToList(key, list)
@@ -34,6 +42,10 @@ EXTERNAL EXT_RemoveFromDictionary(x,y)
 ~list = EXT_AddToDictionary(key, value, list)
 ===function RemoveFromDictionary(key, ref list)
 ~list = EXT_RemoveFromDictionary(key, list)
+===function HasValue(key, ref list)
+~return EXT_HasValue(key, list)
+===function GetValue(key, ref list)
+~return EXT_GetValue(key, list)
 
 ===function IsInteractable(b)
 {b:
@@ -253,10 +265,11 @@ PLAYER_BARK(bad) These will also show up though in the generic list of player ba
 ->END
 
 ==exampleInkArraysStart
+->intro
+=intro
+This is an example of using some string manipulation to create a kind of dictionary or list that can be saved in Ink.
 ->loop
 =loop
-This is an example of using some string manipulation to create a kind of dictionary or list that can be saved in Ink.
-
 Current list: {testList}
 Current dictionary: {testDictionary}
 
@@ -268,5 +281,13 @@ Current dictionary: {testDictionary}
 + [Remove from list]
 {RemoveFromList("2", testList)}
 {RemoveFromDictionary("testRemovable", testDictionary)}
+->loop
++ [Check list]
+Does list contain "2"? {HasValue("2", testList)}
+Does dictionary contain key "testRemovable"? {HasValue("testRemovable", testDictionary)}
+->loop
++ [Get value]
+Index zero in list is: {GetValue(4, testList)}
+Under "testRemovable" we find: {GetValue("testRemovable", testDictionary)}
 ->loop
 
